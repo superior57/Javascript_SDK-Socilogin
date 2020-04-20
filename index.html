@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+    <title>Welcome</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <link href="login.css" rel="stylesheet" id="login-css">
+    
+<script type="text/javascript" lang="javascript" src="https://cdns.gigya.com/js/gigya.js?apikey=3_mK2cmEzLkzhqe4MUrtPncxbv4wKsYAhsew0iVwhVUls3c_Jx_HLX434jAVpq5M_W"></script>
+
+<!--     <script type="text/javascript" lang="javascript"
+            src="api.js">
+    </script> -->
+
+    <script type="text/javascript" lang="javascript" src="login.js"></script>
+
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div>
+            <div class="wrap">
+                <p class="form-title">
+                    Sign In with your Social Media Account
+                    <img id="img_flag" width="60px" height="60px" src="flag.png">
+                    <span id="flag"></span><span id="times" style="font-size: 12px; letter-spacing: 0px !important;">- times you logged in</span>
+                </p>
+                <!-- <div id="loginContainer" class="login"> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mailModal" class="modal fade" role="dialog" style=".close {display: none;}">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h6 class="modal-title">Enter your email address</h6>
+            </div>
+            <div class="modal-body">
+                <input type="text" placeholder="email@example.com">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAccept" class="btn btn-default" data-dismiss="modal">Accept</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // document.cookie = "loggedFlag=0"
+        var flag = getCookie('loggedFlag');
+        if (flag == "") {
+            document.cookie = "loggedFlag=0";           
+        }
+        else{
+            // $('#flag').css('display', 'block');
+            // $('#times').css('display', 'block');
+            // $('#img_flag').css('display', 'block'); 
+            $('#flag').text(flag);    
+        }
+
+
+        gigya.accounts.showScreenSet({screenSet:'Default-RegistrationLogin'});
+
+        gigya.accounts.addEventHandlers({ onLogin: sigCheck});
+    });
+
+
+      
+    // Global vars for debugging
+    var xthisUid='';
+    var xthisUidSig='';
+    var xthisSigTStamp='';
+      
+    // The function to send the AJAX call to the server
+    function MakeRequest_sigCheck() { 
+
+        var flag = getCookie('loggedFlag');
+        flag = parseInt(flag) + 1;
+        document.cookie = "loggedFlag="+flag;
+
+        // console.log("logging");
+        window.location.replace("../account");
+    }
+      
+    // The function to run on the onLogin event
+    function sigCheck(response) {
+        resObj=response;
+        xthisUid=resObj.UID;
+        xthisUidSig=resObj.UIDSignature;
+        xthisSigTStamp=resObj.signatureTimestamp;
+        MakeRequest_sigCheck();
+    }
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+      
+    // Add the event handler
+    
+
+</script>
+
+</html>
